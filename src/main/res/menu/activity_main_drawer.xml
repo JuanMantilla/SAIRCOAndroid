@@ -3,9 +3,9 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/ingresar"
+            android:id="@+id/enlazar"
             android:icon="@android:drawable/ic_menu_agenda"
-            android:title="Ingresar" />
+            android:title="Enlazar los recursos de cómputo" />
         <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_menu_gallery"
