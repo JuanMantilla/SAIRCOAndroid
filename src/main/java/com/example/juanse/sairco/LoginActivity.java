@@ -53,6 +53,10 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
     public int respuestaServidor;
+    public String usuario;
+    public String clave;
+    public String tipoUsuario;
+    public String urlParameters;
     /**
      * Id to identity READ_CONTACTS permission request.
      */
@@ -104,15 +108,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         System.out.println("Las 4 primeras letras son: " + usuarioAdministrador);
         if ("t000".equals(usuarioAdministrador) || "T000".equals(usuarioAdministrador)){
             final String url="http://raoapi.utbvirtual.edu.co:8082/token";
+            final String usuario= "username";
             if (isEmailValid(email) && isPasswordValid(password)) {
+                tipoUsuario="usuario";
 
                 new AsyncHttpTask().execute(url, email, password);
             }
-        }else Toast.makeText(LoginActivity.this,"Ingresó un usuario invalido dentro de la universidad, intente de nuevo",Toast.LENGTH_SHORT).show();
+        }else {
+            final String usuario= "email";
+            tipoUsuario="administrador";
+            final String url="http://labsoftware03.unitecnologica.edu.co/login";
+            new AsyncHttpTask().execute(url, email, password, usuario);
+        }
 
     }
-
-
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
@@ -263,6 +272,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
+
     public class AsyncHttpTask extends AsyncTask<String, Void, Integer> {
 
         Context context;
@@ -274,16 +284,31 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected Integer doInBackground(String... params) {
             URL url;
             HttpURLConnection connection = null;
+
             try {
+                String usuarioAdministrador = params[1].substring(0,4);
                 //Create connection
-                String urlParameters = "username=" + URLEncoder.encode(params[1], "UTF-8") +
-                        "&password=" + URLEncoder.encode(params[2], "UTF-8");
+                if ("t000".equals(usuarioAdministrador) || "T000".equals(usuarioAdministrador)){
+                    usuario= "username=";
+                    clave= "&password=";
+                    urlParameters = usuario + URLEncoder.encode(params[1], "UTF-8") +
+                            clave + URLEncoder.encode(params[2], "UTF-8");
+                }else {
+                    String soyAndroid="&Movil=";
+                    urlParameters = "email=" + params[1] +
+                            "&password="+params[2]+ soyAndroid +"True";
+                    System.out.println("url que se envia: "+urlParameters);
+                }
+
+
 
                 url = new URL(params[0]);
+
                 connection = (HttpURLConnection)url.openConnection();
                 connection.setRequestMethod("POST");
 
                 connection.setRequestProperty("Content-Length", "" + Integer.toString(urlParameters.getBytes().length));
+
                 connection.setRequestProperty("Content-Language", "en-US");
 
                 connection.setUseCaches(false);
@@ -310,19 +335,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                     // Commit the edits!
                     //editor.commit();
-
                     Log.e("Respuesta",sb.toString());
                 } catch (Exception e){
+                    respuestaServidor=-2;
                     e.printStackTrace();
                 }
-
                 //return response.toString();
                 respuestaServidor=connection.getResponseCode();
                 Log.e("Respuesta", "ID = "+connection.getResponseCode());
                 return 1;
-
             } catch (Exception e) {
                 Log.e("onExecute", "Error de app");
+                respuestaServidor=-1;
                 e.printStackTrace();
                 return null;
 
@@ -337,21 +361,36 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected void onPostExecute(Integer result) {
 
-            System.out.println("El resultado es: "+respuestaServidor);
-            if (respuestaServidor==200) {
+            System.out.println("estado="+respuestaServidor);
+            if (respuestaServidor==200 && "usuario".equals(tipoUsuario)) {
                 Log.e("onPostExecute", "on PostExec");
 
-                SharedPreferences settings = getSharedPreferences("TokenStorage", 0);
-                Log.e("onPostExecute", "TokenSaved:" + settings.getString("token", ""));
-                Log.e("onPostExecute", "IdSaved:" + settings.getString("id", ""));
+//                SharedPreferences settings = getSharedPreferences("TokenStorage", 0);
+//                Log.e("onPostExecute", "TokenSaved:" + settings.getString("token", ""));
+//                Log.e("onPostExecute", "IdSaved:" + settings.getString("id", ""));
 
                 Intent intent_name = new Intent();
                 intent_name.setClass(getApplicationContext(), MainActivity.class);
                 startActivity(intent_name);
+            }else if (respuestaServidor==200 && "administrador".equals(tipoUsuario)){
+                Log.e("onPostExecute", "on PostExec");
+                Intent intent_name = new Intent();
+                intent_name.setClass(getApplicationContext(), AdministratorMenu.class);
+                startActivity(intent_name);
             }else{
-                Toast.makeText(LoginActivity.this,"Credenciales invalidas, intente de nuevo",Toast.LENGTH_SHORT).show();
-            }
+                switch (respuestaServidor){
+                    case (401):
+                        Toast.makeText(LoginActivity.this,"Credenciales invalidas, intente de nuevo.",Toast.LENGTH_LONG).show();
+                        break;
+                    case (500):
+                        Toast.makeText(LoginActivity.this,"Servidor en reparación.",Toast.LENGTH_LONG).show();
+                        break;
+                    default:
+                        Toast.makeText(LoginActivity.this,"Verifique que tenga conexión a internet",Toast.LENGTH_LONG).show();
+                        break;
+                }
 
+            }
         }
     }
 }
