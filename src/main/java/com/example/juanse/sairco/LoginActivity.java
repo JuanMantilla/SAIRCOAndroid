@@ -3,6 +3,7 @@ package com.example.juanse.sairco;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -79,6 +80,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mUserNameView;
     private View mProgressView;
     private View mLoginFormView;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mPasswordView = (EditText) findViewById(R.id.password);
         mUserNameView = (EditText) findViewById(R.id.username);
         Button btnIngresar = (Button) findViewById(R.id.btnIngresar);
+        progressDialog = new ProgressDialog(this);
+
         btnIngresar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -278,6 +282,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         Context context;
         @Override
         protected void onPreExecute() {
+            progressDialog.setCancelable(false);
+            progressDialog.setMessage("Loading...");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.show();
         }
 
         @Override
@@ -361,6 +369,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected void onPostExecute(Integer result) {
 
+            progressDialog.dismiss();
+
             System.out.println("estado="+respuestaServidor);
             if (respuestaServidor==200 && "usuario".equals(tipoUsuario)) {
                 Log.e("onPostExecute", "on PostExec");
@@ -374,6 +384,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 startActivity(intent_name);
             }else if (respuestaServidor==200 && "administrador".equals(tipoUsuario)){
                 Log.e("onPostExecute", "on PostExec");
+
                 Intent intent_name = new Intent();
                 intent_name.setClass(getApplicationContext(), AdministratorMenu.class);
                 startActivity(intent_name);

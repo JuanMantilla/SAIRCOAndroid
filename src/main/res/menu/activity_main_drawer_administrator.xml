@@ -5,19 +5,19 @@
         <item
             android:id="@+id/enlazar"
             android:icon="@android:drawable/ic_menu_agenda"
-            android:title="Reservar un recurso de cómputo" />
+            android:title="Enlazar los recursos de cómputo" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/eliminarEquipos"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:title="Eliminar los recursos de cómputo" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/actualizarEquipos"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Mis reservas" />
+            android:title="Actualizar los recursos de cómputo" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/obtenerInfo"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Cancelar una reserva" />
+            android:title="Obtener información" />
     </group>
 
     <item android:title="Communicate">

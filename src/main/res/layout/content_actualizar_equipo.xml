@@ -9,11 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.juanse.sairco.AdministratorMenu"
-    tools:showIn="@layout/app_bar_main_administrator">
+    tools:context="com.example.juanse.sairco.actualizarEquipoActivity"
+    tools:showIn="@layout/app_bar_actualizar_equipo">
 
-    <FrameLayout
-    android:id="@+id/container_app"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"></FrameLayout>
 </RelativeLayout>
