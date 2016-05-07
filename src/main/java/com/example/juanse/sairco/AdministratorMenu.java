@@ -38,7 +38,9 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import com.example.juanse.sairco.Equipo;
+import com.example.juanse.sairco.fragments.ActualizarSalon;
 import com.example.juanse.sairco.fragments.InfoEquipo;
+import com.example.juanse.sairco.fragments.InfoSalones;
 
 public class AdministratorMenu extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -163,10 +165,13 @@ public class AdministratorMenu extends AppCompatActivity implements NavigationVi
             fragment = new ActualizarEquipo();
             getSupportFragmentManager().beginTransaction().replace(R.id.container_app, fragment).commit();
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.actualizarSalones) {
+            fragment = new ActualizarSalon();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_app, fragment).commit();
 
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.obtenerInfoSalones) {
+            fragment = new InfoSalones();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_app, fragment).commit();
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

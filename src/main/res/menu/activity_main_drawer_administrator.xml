@@ -4,20 +4,29 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/enlazar"
-            android:icon="@android:drawable/ic_menu_agenda"
-            android:title="Enlazar los recursos de cómputo" />
+            android:icon="@android:drawable/ic_menu_manage"
+            android:title="Enlazar equipos" />
         <item
             android:id="@+id/eliminarEquipos"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Eliminar los recursos de cómputo" />
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Eliminar equipos" />
         <item
             android:id="@+id/actualizarEquipos"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Actualizar los recursos de cómputo" />
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Actualizar equipos" />
+        <item
+            android:id="@+id/actualizarSalones"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Actualizar salones" />
         <item
             android:id="@+id/obtenerInfo"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Obtener información" />
+            android:title="Información equipos" />
+        <item
+            android:id="@+id/obtenerInfoSalones"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Información salones" />
+
     </group>
 
     <item android:title="Communicate">

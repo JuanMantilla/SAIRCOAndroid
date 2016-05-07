@@ -10,30 +10,31 @@ import android.widget.TextView;
 
 import com.example.juanse.sairco.Equipo;
 import com.example.juanse.sairco.R;
+import com.example.juanse.sairco.Salon;
 
 import java.util.List;
 
 /**
  * Created by juanse on 6/05/2016.
  */
-public class AdapterObtainInfo extends BaseAdapter {
+public class AdapterObtainInfoSalones extends BaseAdapter {
 
-    private List<Equipo> equiposList;
+    private List<Salon> salonesList;
     private Context context;
 
-    public AdapterObtainInfo(List<Equipo> equiposList, Context context) {
-        this.equiposList = equiposList;
+    public AdapterObtainInfoSalones(List<Salon> salonesList, Context context) {
+        this.salonesList = salonesList;
         this.context = context;
     }
 
     @Override
     public int getCount() {
-        return equiposList.size();
+        return salonesList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return equiposList.get(position);
+        return salonesList.get(position);
     }
 
     @Override
@@ -51,13 +52,11 @@ public class AdapterObtainInfo extends BaseAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = inf.inflate(R.layout.row_obtain_info, null);
 
-            Equipo equipo = equiposList.get(position);
+            Salon salon= salonesList.get(position);
             TextView nombre= (TextView) v.findViewById(R.id.obtainName);
             TextView ubicacion= (TextView) v.findViewById(R.id.obtainUbication);
-            TextView nroReservas= (TextView) v.findViewById(R.id.obtainNroReservas);
-            nombre.setText("Nombre: "+ equipo.getNombre());
-            ubicacion.setText("Ubicacion: "+equipo.getUbicacion());
-            nroReservas.setText("Numero de reservas: "+equipo.getNroReservas());
+            nombre.setText("Nombre: "+ salon.getNombre());
+            ubicacion.setText("Ubicacion: "+salon.getUbicacion());
         }else{
             v=(View) convertView;
         }
