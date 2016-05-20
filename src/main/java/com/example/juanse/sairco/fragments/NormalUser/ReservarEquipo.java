@@ -1,4 +1,4 @@
-package com.example.juanse.sairco.fragments;
+package com.example.juanse.sairco.fragments.NormalUser;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,6 +24,7 @@ import com.example.juanse.sairco.Equipo;
 import com.example.juanse.sairco.MainActivity;
 import com.example.juanse.sairco.R;
 import com.example.juanse.sairco.adapters.AdapterObtainInfo;
+import com.example.juanse.sairco.util.Utilities;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -45,56 +48,90 @@ import cz.msebera.android.httpclient.Header;
 /**
  * Created by juanse on 6/05/2016.
  */
-public class ActualizarEquipo extends Fragment {
+public class ReservarEquipo extends Fragment {
 
     public View v;
     public ListView listView;
     public List<Equipo> equiposList = new ArrayList<>();
     private AdapterObtainInfo adapterObtainInfo;
     ProgressDialog progressDialog;
-    String postID;
-    String postNombre;
-    String postUbicacion;
+    String postFechaInicial;
+    String postFechaFinal;
     String urlParameters;
+    ArrayList<String> parametros = new ArrayList<String>();
     public int respuestaServidor;
+    CheckBox tv3, tv4, tv5;
+    public EditText tv1,tv2;
 
-    EditText tv1,tv2, tv3;
 
-    public ActualizarEquipo() {
+    public ReservarEquipo() {
 
     }
 
-    final String URL = "http://labsoftware03.unitecnologica.edu.co/equipoActualizado";
+    final String URL = "http://labsoftware03.unitecnologica.edu.co/reservarEquipo";
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        v = inflater.inflate(R.layout.fragment_actualizarequipo, container, false);
+        v = inflater.inflate(R.layout.fragment_reservar_equipo, container, false);
 
-        tv1 = (EditText) v.findViewById(R.id.postID);
-        tv2 = (EditText) v.findViewById(R.id.postNuevoNombre);
-        tv3 = (EditText) v.findViewById(R.id.postNuevaUbicacion);
-
-        Button btn = (Button) v.findViewById(R.id.btnPost);
-
-
-
-
-        btn.setOnClickListener(new View.OnClickListener() {
+        tv1 = (EditText) v.findViewById(R.id.postFechaInicial);
+        tv2 = (EditText) v.findViewById(R.id.postFechaFinal);
+        tv3 = (CheckBox) v.findViewById(R.id.Internet);
+        tv4 = (CheckBox) v.findViewById(R.id.NotePad);
+        tv5 = (CheckBox) v.findViewById(R.id.Office);
+        tv3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                postID = tv1.getText().toString();
-                postNombre = tv2.getText().toString();
-                postUbicacion = tv3.getText().toString();
-
-                new AsyncHttpTask().execute(URL);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    parametros.add("&software1=Google Chrome");
+                }
+                else{
+                    parametros.remove("&software1=Google Chrome");
+                }
             }
         });
+        tv4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    parametros.add("&software2=Notepad++");
+                }
+                else{
+                    parametros.remove("&software2=Notepad++");
+                }
+            }
+        });
+        tv5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    parametros.add("&software3=Microsoft Office Professional Plus 2013");
+                }
+                else{
+                    parametros.remove("&software3=Microsoft Office Professional Plus 2013");
+                }
+            }
+        });
+        addListenerOnButton();
         return v;
 
     }
+    public void addListenerOnButton(){
 
+        Button btn = (Button) v.findViewById(R.id.btnPost);
+        btn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                postFechaInicial = tv1.getText().toString();
+                postFechaFinal = tv2.getText().toString();
+                new AsyncHttpTask().execute(URL);
+            }
+        });
+    }
     public class AsyncHttpTask extends AsyncTask<String, Void, Integer> {
 
         Context context;
@@ -113,13 +150,17 @@ public class ActualizarEquipo extends Fragment {
             HttpURLConnection connection = null;
 
             try {
+                StringBuffer parametrosVerdaderos = new StringBuffer();
+                for (String parametrosVerdadero:  parametros){
+                    parametrosVerdaderos.append(parametrosVerdadero);
+                }
+                String user= Utilities.getPref(Utilities.USER, getActivity().getApplicationContext());
                 //Create connection
-                String id = postID;
-                String nombre = postNombre;
-                String ubicacion = postUbicacion;
                 String soyAndroid = "&Movil=";
-                urlParameters = "id=" + id +
-                        "&name=" + postNombre + "&ubicacion=" + postUbicacion;
+                urlParameters = "usuario=" + user+
+                        "&fecha=" + postFechaInicial + "&fecha2=" + postFechaFinal+parametrosVerdaderos;
+                System.out.println("url que se envia: " + urlParameters);
+
                 url = new URL(params[0]);
 
                 connection = (HttpURLConnection) url.openConnection();
@@ -186,15 +227,15 @@ public class ActualizarEquipo extends Fragment {
             switch (respuestaServidor) {
                 case (401):
                     Toast.makeText(getActivity(), "Credenciales invalidas, intente de nuevo.", Toast.LENGTH_LONG).show();
-                    System.out.println("error: No autorizado");
                     break;
                 case (500):
                     Toast.makeText(getActivity(), "Servidor en reparación.", Toast.LENGTH_LONG).show();
-                    System.out.println("Error interno de la api");
+                    break;
+                case (200):
+                    Toast.makeText(getActivity(), "Reserva realizada satisfactoriamente", Toast.LENGTH_LONG).show();
                     break;
                 default:
                     Toast.makeText(getActivity(), "Verifique que tenga conexión a internet", Toast.LENGTH_LONG).show();
-                    System.out.println("A vaina");
                     break;
             }
 

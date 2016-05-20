@@ -3,7 +3,7 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/enlazar"
+            android:id="@+id/reservar"
             android:icon="@android:drawable/ic_menu_agenda"
             android:title="Reservar un recurso de cómputo" />
         <item

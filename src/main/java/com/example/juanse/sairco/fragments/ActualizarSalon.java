@@ -120,8 +120,6 @@ public class ActualizarSalon extends Fragment {
                 String soyAndroid = "&Movil=";
                 urlParameters = "id=" + id +
                         "&name=" + postNombre + "&ubicacion=" + postUbicacion;
-                System.out.println("url que se envia: " + urlParameters);
-
                 url = new URL(params[0]);
 
                 connection = (HttpURLConnection) url.openConnection();

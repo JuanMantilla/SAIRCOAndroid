@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +35,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.juanse.sairco.util.Utilities;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -109,7 +112,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private void login(String email, String password) {
         String usuarioAdministrador = email.substring(0,4);
-        System.out.println("Las 4 primeras letras son: " + usuarioAdministrador);
         if ("t000".equals(usuarioAdministrador) || "T000".equals(usuarioAdministrador)){
             final String url="http://raoapi.utbvirtual.edu.co:8082/token";
             final String usuario= "username";
@@ -370,14 +372,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected void onPostExecute(Integer result) {
 
             progressDialog.dismiss();
-
-            System.out.println("estado="+respuestaServidor);
+            //System.out.println("estado="+respuestaServidor);
             if (respuestaServidor==200 && "usuario".equals(tipoUsuario)) {
                 Log.e("onPostExecute", "on PostExec");
+                Utilities.putPref(Utilities.USER, mUserNameView.getText().toString(), getApplicationContext());
 
 //                SharedPreferences settings = getSharedPreferences("TokenStorage", 0);
 //                Log.e("onPostExecute", "TokenSaved:" + settings.getString("token", ""));
 //                Log.e("onPostExecute", "IdSaved:" + settings.getString("id", ""));
+
 
                 Intent intent_name = new Intent();
                 intent_name.setClass(getApplicationContext(), MainActivity.class);
@@ -404,5 +407,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         }
     }
+
 }
 

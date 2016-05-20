@@ -50,7 +50,7 @@ public class AdapterObtainInfoSalones extends BaseAdapter {
         if (v == null) {
             LayoutInflater inf = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inf.inflate(R.layout.row_obtain_info, null);
+            v = inf.inflate(R.layout.row_obtain_info_salones, null);
 
             Salon salon= salonesList.get(position);
             TextView nombre= (TextView) v.findViewById(R.id.obtainName);

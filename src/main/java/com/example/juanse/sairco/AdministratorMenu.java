@@ -115,28 +115,25 @@ public class AdministratorMenu extends AppCompatActivity implements NavigationVi
         return super.onOptionsItemSelected(item);
     }
 
-    private ArrayList<Equipo>parseResult(String result) {
-        ArrayList<Equipo> lista= new ArrayList<>();
-        try {
-
-            JSONArray response = new JSONArray(result);
-            Equipo equipo1= new Equipo();
-            JSONArray nombre = new JSONArray(response.optString(0));
-            for (int i=0;i<response.length();i++){
-                equipo1.setID(response.getString(0));
-                equipo1.setNombre(nombre.toString(1));
-                equipo1.setUbicacion(response.optString(3));
-                lista.add(equipo1);
-
-            }
-
-
-            System.out.println("En la quinta: " + equipo1.nombre);
-            return (lista);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }return lista;
-    }
+//    private ArrayList<Equipo>parseResult(String result) {
+//        ArrayList<Equipo> lista= new ArrayList<>();
+//        try {
+//
+//            JSONArray response = new JSONArray(result);
+//            Equipo equipo1= new Equipo();
+//            JSONArray nombre = new JSONArray(response.optString(0));
+//            for (int i=0;i<response.length();i++){
+//                equipo1.setID(response.getString(0));
+//                equipo1.setNombre(nombre.toString(1));
+//                equipo1.setUbicacion(response.optString(3));
+//                lista.add(equipo1);
+//
+//            }
+//            return (lista);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }return lista;
+//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
